@@ -38,27 +38,21 @@ app.use(cors());
 
 
 
-// Serve static files from template
-app.use(express.static(__dirname + "/template"));
 
-// Set View Engine - EJS template
-app.set("view engine", "ejs");
-
-// View engine directory
-app.set("views", "views");
 
 
 
 // Router module
-const registerRouter = require("./routes/register");
-const homeRouter = require("./routes/home");
+const userRouter = require("./routes/user");
+const studentRouter= require("./routes/student");
 
 // // Routes
-app.use("/", registerRouter);
-app.use("/", homeRouter);
+app.use("/", userRouter);
+app.use("/", studentRouter);
 
 // Catch 404 and forward to error handler
 const notFoundCtrl = require("./controller/error");
+const user = require("./controller/user");
 app.use(notFoundCtrl.getNotFound);
 
 // Server Error handler

@@ -1,32 +1,38 @@
 const mongoose = require('mongoose');
 
 var UserSchema = new mongoose.Schema({
-    email: {
+    phone: {
         type: String,
-        unique: true,
         required: true,
-        trim: true
+        unique: true,
     },
     name: {
         type: String,
         required: true,
         trim: true
     },
-    password: {
+    absent:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Absent',
+    }],
+    marks:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Marks',
+    }],
+    performance:{
+        type : String,
+    },
+    id_card: {
         type: String,
-        required: true,
     },
-    loginAttempts: {
+    monthly_fees: {
         type: Number,
-        required: true
-    },
-    lockUntil: {
-        type: Number
     },
     role: {
         type: String,
         required: true,
-        default: "Patient"
+        enum: ["Student", "Teacher", "Admin"],
+        default: "Student"
     }
 }, {
     timestamps: true
