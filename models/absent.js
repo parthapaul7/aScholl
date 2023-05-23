@@ -15,7 +15,11 @@ const absentSchema = new mongoose.Schema({
         enum: ["P", "A"],
         default: "A",
         required: true
-    }
+    },
+    class : {
+        type: String,
+        required: true
+    },
 }, {
     timestamps: true
 });

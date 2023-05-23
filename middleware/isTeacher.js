@@ -1,11 +1,11 @@
 const User = require('../models/user');
 
 module.exports = async(req, res, next) => {
-    email = req.cookies && req.cookies.email
+    const user_id= req.cookies && req.cookies.user_id
 
-    const user = (await User.find({ email: email }))[0];
+    const user = await User.findOne({ _id: user_id});
 
-    if (user && (user.role == "Doctor")) {
+    if (user && (user.role == "Teacher")) {
         return next();
     }
     return res.status(404).json({

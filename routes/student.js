@@ -5,8 +5,10 @@ const isAdmin = require("../middleware/isAdmin");
 const isTeacher= require("../middleware/isTeacher");
 
 // GET for front page
-router.get("/attendence", studentController.getAttendence);
+router.get("/attendance", studentController.getAttendance);
 
-router.post("/attendence", studentController.postAttendence);
+router.post("/attendance", studentController.postAttendance);
+
+router.delete("/attendance/:id", studentController.deleteAttendance);
 
 module.exports = router;

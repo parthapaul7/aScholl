@@ -45,10 +45,12 @@ app.use(cors());
 // Router module
 const userRouter = require("./routes/user");
 const studentRouter= require("./routes/student");
+const marksRouter= require("./routes/marks");
 
 // // Routes
 app.use("/", userRouter);
 app.use("/", studentRouter);
+app.use("/", marksRouter);
 
 // Catch 404 and forward to error handler
 const notFoundCtrl = require("./controller/error");
