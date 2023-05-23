@@ -1,5 +1,16 @@
 const User = require('../models/user')
 
+exports.postLogin = async(req, res, next) => {
+    const user_id = req.cookies && req.cookies.user_id;
+
+    console.log(user_id);
+    return res.status(200).json({
+        status: "success",
+        message: "this is get request to user login"
+    });
+}
+
+
 exports.getUser= async(req, res, next) => {
 
     try {

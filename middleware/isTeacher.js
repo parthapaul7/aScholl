@@ -5,7 +5,7 @@ module.exports = async(req, res, next) => {
 
     const user = await User.findOne({ _id: user_id});
 
-    if (user && (user.role == "Teacher")) {
+    if (user && (user.role == "Teacher" || user.role == "Admin")) {
         return next();
     }
     return res.status(404).json({
