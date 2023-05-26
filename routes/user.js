@@ -12,6 +12,7 @@ router.get("/user", isAdmin, isTeacher, userController.getUser);
 router.post("/user", userController.postUser);
 
 router.post("/login", signToken, userController.postLogin);
+router.get("/logout", check, userController.getLogout);
 
 
 module.exports = router;

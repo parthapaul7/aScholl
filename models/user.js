@@ -25,15 +25,18 @@ var UserSchema = new mongoose.Schema({
     id_card: {
         type: String,
     },
-    monthly_fees: {
-        type: Number,
-    },
+    monthly_fees: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Amount',
+        }
+    ],
     role: {
         type: String,
         required: true,
         enum: ["Student", "Teacher", "Admin"],
         default: "Student"
-    }
+    },
 }, {
     timestamps: true
 });
