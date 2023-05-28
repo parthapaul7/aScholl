@@ -1,9 +1,9 @@
 const User = require('../models/user');
 
 module.exports = async(req, res, next) => {
-    const user_id= req.cookies && req.cookies.user_id
+    const phone= req.cookies && req.cookies.phone
 
-    const user = await User.findOne({ _id: user_id});
+    const user = await User.findOne({ phone: phone});
 
     if (user && (user.role == "Staff" || user.role == "Admin")) {
         return next();

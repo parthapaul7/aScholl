@@ -2,15 +2,15 @@ const maxAge = 60 * 60 * 12;
 const jwt = require("jsonwebtoken");
 
 exports.signToken = (req, res, next) => {
-    user_id = req.body.user_id;
+    phone = req.body.phone;
     
     console.log(process.env.secret);
-    const token = jwt.sign({ user_id }, process.env.secret, {
+    const token = jwt.sign({ phone}, process.env.secret, {
         expiresIn: maxAge, //this is in seconds
     });
 
     res.cookie("token", token, { maxAge: maxAge * 1000 });
-    res.cookie("user_id", user_id , { maxAge: maxAge * 1000 })
+    res.cookie("phone", phone , { maxAge: maxAge * 1000 })
 
     return next();
 }

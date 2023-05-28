@@ -11,6 +11,11 @@ const amountSchema= new mongoose.Schema({
         required: true,
         enum: ["Debit","Credit"],
     },
+    mode:{
+        type: String,
+        required: true,
+        enum: ["Cash","Cheque","Online"],
+    },
     amount:{
         type: Number,
         required: true,
@@ -45,7 +50,7 @@ const amountSchema= new mongoose.Schema({
 });
 
 const Amount = mongoose.model('Amount', amountSchema);
-
+module.exports = Amount;
 
 
 

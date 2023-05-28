@@ -1,7 +1,7 @@
 const User = require('../models/user')
 
 exports.postLogin = async(req, res, next) => {
-    const user_id = req.cookies && req.cookies.user_id;
+    const user_id = req.cookies && req.cookies.phone;
 
     console.log(user_id);
     return res.status(200).json({
@@ -32,8 +32,27 @@ exports.getUser= async(req, res, next) => {
             error: error.message
         }); 
     }
+}
 
-        
+exports.getOneUser = async(req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id).populate('monthly_fees', 'absent');
+        if (!user) {
+            return res.status(200).json({
+                message: "No user found"
+            });
+        }
+        return res.status(200).json({
+            status: "success",
+            data: user
+        });
+    } catch (error) {
+        return res.status(404).json({
+            status: "error",
+            message: "No user found",
+            error: error.message
+        });
+    }
 }
 
 exports.postUser = async(req, res, next) => {

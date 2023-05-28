@@ -1,9 +1,9 @@
 const User = require('../models/user');
 
 module.exports = async(req, res, next) => {
-    const user_id= req.cookies && req.cookies.user_id
+    const phone= req.cookies && req.cookies.phone
 
-    const user = (await User.find({ _id: user_id }))[0];
+    const user = (await User.find({ phone:  phone}))[0];
 
     if (user && (user.role == "Admin")) {
         return next();

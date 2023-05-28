@@ -6,7 +6,7 @@ const isTeacher= require("../middleware/isTeacher");
 const { check , signToken} = require("../middleware/jwtAuth");
 
 // GET for front page
-router.get("/user", isAdmin, isTeacher, userController.getUser);
+router.get("/user", check, userController.getUser);
 
 // register user    
 router.post("/user", userController.postUser);
