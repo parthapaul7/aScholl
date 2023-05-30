@@ -73,3 +73,20 @@ exports.deleteMarks = async(req, res, next) => {
             }); 
         }
 }
+
+exports.getUserMarks = async(req, res, next) => {
+    try {
+        const marks = await Marks.find({student_id: req.params.id});
+        return res.status(200).json({
+            status: "success",
+            data: marks
+        }); 
+    } catch (error) {
+       return res.status(404).json({
+            status: "error",
+            message: "No user found",
+            error: error.message
+        });
+    }
+
+}

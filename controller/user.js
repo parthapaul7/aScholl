@@ -76,7 +76,7 @@ exports.postUser = async(req, res, next) => {
 exports.getLogout = (req, res, next) => {
     // delete session object
     res.cookie("token", "expire", { maxAge: 10 });
-    res.cookie("user_id", "expire", { maxAge: 10 });
+    res.cookie("phone", "expire", { maxAge: 10 });
     return res.status(200).json({
         status: "success",
         message: "User logged out successfully",

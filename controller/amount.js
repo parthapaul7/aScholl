@@ -2,6 +2,16 @@ const User = require('../models/user')
 const Amount=  require('../models/amounts');
 
 exports.getAmount = async(req, res, next) => {
+
+    // match date
+    if(req.query.date){
+        const date = new Date(req.query.date);
+        req.query.date = {
+            $gte: date,
+            $lt: new Date(date.getFullYear(), date.getMonth()+1, 1)
+        }
+    }
+
     try {
         const amount= await Amount.find({...req.query});
 
@@ -114,7 +124,7 @@ exports.deleteAmount = async(req, res, next) => {
     }
 }
 
-
+// calculating user amounts
 // get user amounts 
 exports.getUserAmount = async(req, res, next) => {
     try {
@@ -187,6 +197,7 @@ exports.getUserAmount = async(req, res, next) => {
 
         return res.status(200).json({
             status: "success",
+            data : amount,
             message: "your are admin"
         });
 
@@ -196,5 +207,144 @@ exports.getUserAmount = async(req, res, next) => {
             message: "No user found",
             error: error.message
         });
+    }
+}
+
+exports.getStatement = async(req, res, next) => {
+    try {
+        const amount = await Amount.find();
+
+        let revenue = {
+            monthly_fees: 0,
+            admission_fees: 0,
+            salary: 0,
+            exam_fees: 0,
+            rent: 0,
+            other: 0,
+            total: 0
+        }
+
+        revenue = amount.reduce((acc, curr) => {
+            if(curr.flow == "Credit"){
+                if(curr.type == "Monthly Fees"){
+                    acc.monthly_fees += curr.amount;
+                }
+                if(curr.type == "Admission Fees"){
+                    acc.admission_fees += curr.amount;
+                }
+                if(curr.type == "Salary"){
+                    acc.salary += curr.amount;
+                }
+                if(curr.type == "Exam Fees"){
+                    acc.exam_fees += curr.amount;
+                }
+                if(curr.type == "Rent"){
+                    acc.rent += curr.amount;
+                }
+                if(curr.type == "Other"){
+                    acc.other += curr.amount;
+                }
+            }
+            return acc;
+        }, revenue);
+        revenue.total = revenue.monthly_fees + revenue.admission_fees + revenue.salary + revenue.exam_fees + revenue.rent + revenue.other; 
+
+        // expenses
+        let expense = {
+            monthly_fees: 0,
+            admission_fees: 0,
+            exam_fees: 0,
+            salary: 0,
+            rent: 0,
+            other: 0,
+            total: 0
+        }
+
+        expense = amount.reduce((acc, curr) => {
+           if(curr.flow == "Debit"){
+                if(curr.type == "Monthly Fees"){
+                    acc.monthly_fees += curr.amount;
+                }
+                if(curr.type == "Admission Fees"){
+                    acc.admission_fees += curr.amount;
+                }
+                if(curr.type == "Salary"){
+                    acc.salary += curr.amount;
+                }
+                if(curr.type == "Exam Fees"){
+                    acc.exam_fees += curr.amount;
+                }
+                if(curr.type == "Rent"){
+                    acc.rent += curr.amount;
+                }
+                if(curr.type == "Other"){
+                    acc.other += curr.amount;
+                }
+            }
+            return acc; 
+        }, expense);
+        expense.total = expense.monthly_fees + expense.admission_fees + expense.salary + expense.exam_fees + expense.rent + expense.other;
+
+
+        const income = {
+            monthly_fees: revenue.monthly_fees - expense.monthly_fees,
+            admission_fees: revenue.admission_fees - expense.admission_fees,
+            salary: revenue.salary - expense.salary,
+            exam_fees: revenue.exam_fees - expense.exam_fees,
+            rent: revenue.rent - expense.rent,
+            other: revenue.other - expense.other,
+            total: revenue.total - expense.total
+        }
+
+        const statement = {
+            revenue,
+            expense,
+            income
+        }
+        return res.status(200).json({
+            status: "success",
+            data: statement 
+        });        
+        
+    } catch (error) {
+       console.log(error); 
+       return res.status(500).json({
+            status: "error",
+            message: "Something went wrong",
+            error: error.message
+        });
+    }
+}
+
+
+exports.getFinancialStatement = async(req, res, next) => {
+
+    try {
+        const amount= await Amount.find().populate("user");
+
+        const data = amount.map((amount) => {
+
+            const data = {
+                date: amount.date,
+                type: amount.type,
+                user: amount.user?.name,
+                user_role: amount.user?.role,
+                amount: amount.amount,
+                flow: amount.flow,
+                description: amount.description
+            }
+            return data;
+       });
+
+       return res.status(200).json({
+            status: "success",
+            data: data 
+       }); 
+    } catch (error) {
+        return res.status(404).json({
+            status: "error",
+            message: "No user found",
+            error: error.message
+        }); 
     }
 }

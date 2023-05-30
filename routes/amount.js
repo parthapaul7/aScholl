@@ -6,16 +6,21 @@ const isStaff = require("../middleware/isStaff");
 const { check } = require("../middleware/jwtAuth");
 
 // GET for front page
-router.get("/amount", isStaff, amountController.getAmount);
+router.get("/amount", check, isStaff, amountController.getAmount);
 
+// get info for a perticular user
 router.get("/amount/:id", check , amountController.getUserAmount);
 
-router.post("/amount", isStaff, amountController.postAmount);
+router.post("/amount", check,isStaff, amountController.postAmount);
 
 // update amount
-router.put("/amount/:id", amountController.updateAmount);
+router.put("/amount/:id", check, isStaff ,amountController.updateAmount);
 
-router.delete("/amount/:id", amountController.deleteAmount);
+router.delete("/amount/:id",check,isAdmin,amountController.deleteAmount);
 
+
+// statement 
+router.get("/statement",check, isAdmin, amountController.getStatement);
+router.get("/financial-statement",check,  amountController.getFinancialStatement);
 
 module.exports = router;
