@@ -15,4 +15,6 @@ router.post("/marks",check, marksController.postMarks);
 
 router.delete("/marks/:id", isAdmin, marksController.deleteMarks);
 
+router.get("/getmarks/:id" , check, marksController.getUserMarks);
+
 module.exports = router;

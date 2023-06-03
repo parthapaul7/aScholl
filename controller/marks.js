@@ -76,7 +76,48 @@ exports.deleteMarks = async(req, res, next) => {
 
 exports.getUserMarks = async(req, res, next) => {
     try {
-        const marks = await Marks.find({student_id: req.params.id});
+        // console.log(req.cookies);
+        const user = await User.findOne({_id: req.params.id});
+        console.log(user);
+        // const marks = await Marks.find({student_id: req.params.id});
+        if(user.role === "Student"){
+           const marks = await Marks.find({student_id: user._id}); 
+            
+           console.log(marks);
+            // seperate marks for all type of exams and use subject as the key
+            let marksObj = {};
+            marks.forEach((mark) => {
+                console.log(marksObj[mark.exam]);
+
+                if(!marksObj[mark.exam]){
+                    let obj= {}; 
+                    obj= {
+                        [mark.subject]: mark.marks,
+                    }; 
+                    marksObj = {
+                        ...marksObj,
+                        [mark.exam]:obj 
+                    };
+                }
+                else{
+                    let obj= marksObj[mark.exam];
+                    obj = {
+                        ...obj,
+                        [mark.subject]: mark.marks,
+                    } 
+                    marksObj = {
+                        ...marksObj,
+                        [mark.exam]:obj 
+                    };
+                }
+            });
+
+            return res.status(200).json({
+                status: "success",
+                data: marksObj 
+            });
+        }
+
         return res.status(200).json({
             status: "success",
             data: marks
