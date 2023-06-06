@@ -9,18 +9,18 @@ const { check } = require("../middleware/jwtAuth");
 router.get("/amount", check, isStaff, amountController.getAmount);
 
 // get info for a perticular user
-router.get("/amount/:id", check , amountController.getUserAmount);
+router.get("/getamount/:id", check , amountController.getUserAmount);
 
 router.post("/amount", check,isStaff, amountController.postAmount);
 
 // update amount
-router.put("/amount/:id", check, isStaff ,amountController.updateAmount);
+router.post("/amount/:id", check, isStaff ,amountController.updateAmount);
 
-router.delete("/amount/:id",check,isAdmin,amountController.deleteAmount);
+router.delete("/amount/:id", check,isAdmin,amountController.deleteAmount);
 
 
 // statement 
-router.get("/statement",check, isAdmin, amountController.getStatement);
+router.get("/statement",check,  amountController.getStatement);
 router.get("/financial-statement",check,  amountController.getFinancialStatement);
 
 module.exports = router;

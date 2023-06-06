@@ -14,6 +14,6 @@ router.post("/library/issue/:id", check, libraryController.issueBook);
 
 router.post("/library/return/:id", check, libraryController.returnBook);
 
-router.delete("/library/:id", isAdmin, libraryController.deleteLibrary);
+router.delete("/library/:id",check, isAdmin, libraryController.deleteLibrary);
 
 module.exports = router;

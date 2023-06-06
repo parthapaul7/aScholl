@@ -1,6 +1,7 @@
 const Library = require('../models/library'); 
 const User = require('../models/user');
 
+
 exports.getLibrary = async (req, res) => {
     try {
         const library = await Library.find({});
@@ -35,10 +36,13 @@ exports.issueBook = async (req, res) => {
         if (library.quantity <= 0) {
                 return res.status(400).json({ msg: "No book left" });
         } else {
+
             const issuedBook = library.issued.find(book => (book.issued_to == req.body.issued_to && book.status == "Issued"));
             if (issuedBook) {
                 return res.status(400).json({ msg: "Book is already issued to the user" });
             }
+
+
             const data = {
                 issued_to : req.body.issued_to,
                 issued_on : req.body.issued_on,
@@ -46,6 +50,8 @@ exports.issueBook = async (req, res) => {
                 status : "Issued"
             }
 
+            // push data to the library.issue array with mongodb
+            
             library.quantity = library.quantity - 1
 
             console.log(data.quantity, library.quantity);

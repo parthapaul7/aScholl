@@ -21,6 +21,39 @@ exports.getMarks= async(req, res, next) => {
     
     }            
 
+exports.getMarksById= async(req, res, next) => {
+        try {
+            const absent= await Marks.findOne({_id: req.params.id});
+            return res.status(200).json({
+                status: "success",
+                data: absent
+            });
+        } catch (error) {
+            return res.status(404).json({
+                status: "error",
+                message: "No user found",
+                error: error
+            });
+        }
+    }
+
+
+exports.updateMarks= async(req, res, next) => {
+        try {
+            const absent= await Marks.updateOne({_id: req.params.id}, {...req.body});
+            return res.status(200).json({
+                status: "success",
+                data: absent
+            });
+        } catch (error) {
+            return res.status(404).json({
+                status: "error",
+                error: error.message
+            });
+        }
+    }
+
+
 exports.postMarks= async(req, res, next) => {
 
     try{
@@ -120,7 +153,7 @@ exports.getUserMarks = async(req, res, next) => {
 
         return res.status(200).json({
             status: "success",
-            data: marks
+            data: "User is not a sudent use marks route to get marks for all students" 
         }); 
     } catch (error) {
        return res.status(404).json({

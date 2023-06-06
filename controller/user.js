@@ -36,7 +36,7 @@ exports.getUser= async(req, res, next) => {
 
 exports.getOneUser = async(req, res, next) => {
     try {
-        const user = await User.findById(req.params.id).populate('monthly_fees', 'absent');
+        const user = await User.findById(req.params.id).populate('monthly_fees');
         if (!user) {
             return res.status(200).json({
                 message: "No user found"

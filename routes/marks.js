@@ -9,11 +9,12 @@ const { check } = require("../middleware/jwtAuth");
 router.get("/marks", check, marksController.getMarks);
 
 // get marks for user
-router.get("/marks/:id", check , marksController.getUserMarks);
+router.get("/marks/:id", check , marksController.getMarksById);
 
-router.post("/marks",check, marksController.postMarks);
+router.post("/marks", isTeacher, marksController.postMarks);
+router.post("/marks/:id", isTeacher, marksController.updateMarks);
 
-router.delete("/marks/:id", isAdmin, marksController.deleteMarks);
+router.delete("/marks/:id", check , isAdmin, marksController.deleteMarks);
 
 router.get("/getmarks/:id" , check, marksController.getUserMarks);
 
